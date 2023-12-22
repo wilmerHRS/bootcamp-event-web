@@ -1,0 +1,19 @@
+.container-full {
+  display: block;
+  /* width: 100vw; */
+  height: 80vh;
+}
+
+.w-full {
+  width: 100vw;
+}
+
+
+.h-full {
+  height: 100vh;
+}
+
+.max-with-200 {
+  width: 100%;
+  max-width: 400px;
+}
