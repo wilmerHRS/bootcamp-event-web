@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { UserModel } from '@core/models/user.model';
 import { AuthService } from '@shared/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
@@ -22,7 +21,7 @@ export class SessionGuard implements CanActivate {
   }
 
   verifySession(token: string | null){
-    if(token) this.cookieService.set('access_token', token);
+    if(token) this.cookieService.set('access_token', token, 4, '/'); // guardar el token con tiempo de expiración
     const existsToken = this.cookieService.check('access_token');
 
     if(!existsToken) {
@@ -36,8 +35,11 @@ export class SessionGuard implements CanActivate {
     this.authService.verifyToken(accessToken).subscribe((user) => {
       if(!user) {
         this.router.navigate(['/errors', '401']);
-        correct = true;
+        correct = false;
+        return;
       }
+
+      this.cookieService.set('user', JSON.stringify(user), 4, '/'); // guardar el usuario con tiempo de expiración
     });
     
     return correct;
